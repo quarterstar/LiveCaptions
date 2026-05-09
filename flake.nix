@@ -8,16 +8,19 @@
       flake = false;
     };
   };
-  outputs = {
-    self,
-    april-asr,
-    nixpkgs,
-    flake-utils,
-  }:
+  outputs =
+    {
+      self,
+      april-asr,
+      nixpkgs,
+      flake-utils,
+    }:
     flake-utils.lib.eachDefaultSystem (
-      system: let
+      system:
+      let
         pkgs = nixpkgs.legacyPackages.${system};
-      in {
+      in
+      {
         packages = rec {
           livecaptions = pkgs.stdenv.mkDerivation rec {
             src = ./.;
@@ -51,7 +54,7 @@
           default = livecaptions;
         };
         apps = rec {
-          livecaptions = flake-utils.lib.mkApp {drv = self.packages.${system}.livecaptions;};
+          livecaptions = flake-utils.lib.mkApp { drv = self.packages.${system}.livecaptions; };
           default = livecaptions;
         };
         devShells.default = pkgs.mkShell {
