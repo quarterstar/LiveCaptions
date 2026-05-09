@@ -99,18 +99,20 @@ static void update_font(LiveCaptionsWindow *self) {
 }
 
 static void update_window_transparency(LiveCaptionsWindow *self) {
-    bool use_transparency = g_settings_get_double(self->settings, "window-transparency") > 0.01;
+    double val = g_settings_get_double(self->settings, "window-transparency");
+    bool use_transparency = val > 0.01;
 
-    if(use_transparency){
+    if (use_transparency) {
         gtk_widget_add_css_class(GTK_WIDGET(self), "transparent-mode");
-
-        int transparency = (int)((1.0 - g_settings_get_double(self->settings, "window-transparency")) * 255.0);
-
-        char css_data[256];
-        snprintf(css_data, 256, ".transparent-mode {\nbackground-color: #000000%02X;\n}", transparency);
+        double alpha = 1.0 - val;
+        char css_data[512];
+        snprintf(css_data, 512,
+                 "window.transparent-mode, .transparent-mode box { background-color: rgba(0,0,0,%.2f); }",
+                 alpha);
         gtk_css_provider_load_from_data(self->css_provider, css_data, -1);
-    }else{
+    } else {
         gtk_widget_remove_css_class(GTK_WIDGET(self), "transparent-mode");
+        gtk_css_provider_load_from_data(self->css_provider, "", -1);
     }
 }
 
@@ -196,10 +198,10 @@ static void livecaptions_window_init(LiveCaptionsWindow *self) {
 
     self->css_provider = gtk_css_provider_new();
     GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(self));
-    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(self->css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(self->css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     g_signal_connect(self->settings, "changed", G_CALLBACK(on_settings_change), self);
-    
+
     g_settings_bind(self->settings, "microphone", self->mic_button, "active", G_SETTINGS_BIND_DEFAULT);
 
     self->font_layout = NULL;

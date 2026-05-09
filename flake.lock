@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "april-asr": {
+    "april-asr-model": {
       "flake": false,
       "locked": {
         "narHash": "sha256-o68Ivb9Iyy71pu6qnxc04x6aDmVu1ql2Mq1NJE7sZRE=",
@@ -10,6 +10,22 @@
       "original": {
         "type": "file",
         "url": "https://april.sapples.net/april-english-dev-01110_en.april"
+      }
+    },
+    "april-asr-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1740690811,
+        "narHash": "sha256-jUcsuTa0HxVdajXLB/KXYH6+vwOdlcZ5awIZRQYqhJY=",
+        "owner": "abb128",
+        "repo": "april-asr",
+        "rev": "8b52f65dd3fbfa58064de85ab78237335b9de911",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abb128",
+        "repo": "april-asr",
+        "type": "github"
       }
     },
     "flake-utils": {
@@ -48,7 +64,8 @@
     },
     "root": {
       "inputs": {
-        "april-asr": "april-asr",
+        "april-asr-model": "april-asr-model",
+        "april-asr-src": "april-asr-src",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       }
